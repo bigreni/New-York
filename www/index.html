@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<!--<link rel="stylesheet" type="text/css" href="css/index.css" />-->
+<link rel="stylesheet" type="text/css" href="http://bigreni.com/css/newyork/index.css" />
+<!-- Include the jQuery library -->
+<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+<link href="css/select2.min.css" rel="stylesheet" />
+<script src="js/select2.min.js"></script>
+<title>Arrivals</title>
+    <style>
+            /* Hide all the app pages until jQuery Mobile inits to
+               avoid the Flash of Unstyled Content */
+            .splashscreen {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index:1001;
+                background: lightgrey;
+                text-shadow: none;
+                color: black;
+            }
+        </style>
+</head>
+<body>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript">
+        var cachebuster = Math.round(new Date().getTime() / 1000);
+        document.write('<script type="text/javascript" src="http://bigreni.com/js/newyork/main.js?cb=' +cachebuster+'"></scr' + 'ipt>');
+        //document.write('<script type="text/javascript" src="js/main.js?cb=' +cachebuster+'"></scr' + 'ipt>');
+    </script>	
+	<script type="text/javascript" src="js/jsrender.min.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <div id="screen" class="splashscreen" style="display: none"></div>
+        <script>
+            // Show the splash screen with a loading message
+            // Handler to hide the message when the loading stops
+            window.onload = function () {
+                onLoad();
+                //document.getElementById("screen").style.display = 'none';
+            };
+            document.getElementById("screen").innerHTML = 'Loading...';
+            document.getElementById("screen").style.display = 'block';
+        </script> 
+    <div id="fullpage" data-role="page">
+		<div id="contentBox" class="box">
+                 <h3>MTA Arrival Times</h3>
+            <!--<div id="sidr">
+              <ul>
+                <li><a href="index.html" >Arrivals</a></li>
+                <li><a href="javascript:loadFaves();" >Favorites</a></li>
+              </ul>
+            </div>-->
+			<table class="routeBox" style="width: 100vw;">
+				<tr>
+					<td colspan="2">Route:</td>
+                </tr>
+            <tr>
+    	        <td>
+                    <div>
+                        <select id="MainMobileContent_routeList" class="dropList" style="width:90vw;" onchange="getDirections();">
+                            <option value="---">Select a Route</option>
+                            <option value="MTA NYCT_B1">B1 - Bay Ridge - Manhattan Beach</option>
+                            <option value="MTA NYCT_B11">B11 - Sunset Park - Midwood</option>
+                            <option value="MTA NYCT_B12">B12 - Lefferts Gardens - East New York</option>
+                            <option value="MTA NYCT_B13">B13 - Spring Creek - Wyckoff Hospital</option>
+                            <option value="MTA NYCT_B14">B14 - Spring Creek - Crown Heights</option>
+                            <option value="MTA NYCT_B15">B15 - Bedford Stuyvesant - JFK Airport</option>
+                            <option value="MTA NYCT_B16">B16 - Bay Ridge - Lefferts Gardens</option>
+                            <option value="MTA NYCT_B17">B17 - Canarsie - Crown Heights</option>
+                            <option value="MTA NYCT_B2">B2 - Kings Hwy Station - Kings Plaza</option>
+                            <option value="MTA NYCT_B20">B20 - Ridgewood - Spring Creek</option>
+                            <option value="MTA NYCT_B24">B24 - Williamsburg - Greenpoint</option>
+                            <option value="MTA NYCT_B25">B25 - Dwntn Bklyn & DUMBO - Broadway Junction</option>
+                            <option value="MTA NYCT_B26">B26 - Downtown Brooklyn - Ridgewood</option>
+                            <option value="MTA NYCT_B3">B3 - Bensonhurst - Bergen Beach</option>
+                            <option value="MTA NYCT_B31">B31 - Gerritsen Beach - Kings Hwy Station</option>
+                            <option value="MTA NYCT_B32">B32 - Williamsburg - Long Island City</option>
+                            <option value="MTA NYCT_B35">B35 - Brownsville - Sunset Park</option>
+                            <option value="MTA NYCT_B36">B36 - Sheepshead Bay - Coney Island</option>
+                            <option value="MTA NYCT_B37">B37 - Downtown Brooklyn - Bay Ridge</option>
+                            <option value="MTA NYCT_B38">B38 - Ridgewood - Downtown Brooklyn</option>
+                            <option value="MTA NYCT_B39">B39 - Williamsburg Bridge Plaza - Lower East Side</option>
+                            <option value="MTA NYCT_B4">B4 - Bay Ridge - Sheepshead Bay</option>
+                            <option value="MTA NYCT_B41">B41 - Kings Plaza - Downtown Brooklyn</option>
+                            <option value="MTA NYCT_B42">B42 - Canarsie Pier - Rockaway Parkway Station</option>
+                            <option value="MTA NYCT_B43">B43 - Greenpoint - Lefferts Gardens</option>
+                            <option value="MTA NYCT_B44">B44 - Sheepshead Bay - Williamsburg</option>
+                            <option value="MTA NYCT_B44+">B44-SBS - Sheepshead Bay - Williamsburg</option>
+                            <option value="MTA NYCT_B45">B45 - Downtown Brooklyn - Crown Heights</option>
+                            <option value="MTA NYCT_B46">B46 - Kings Plaza - Williamsburg</option>
+                            <option value="MTA NYCT_B46+">B46-SBS - Kings Plaza - Williamsburg</option>
+                            <option value="MTA NYCT_B47">B47 - Kings Plaza - Bedford-Stuyvesant</option>
+                            <option value="MTA NYCT_B48">B48 - Lefferts Gardens - Greenpoint</option>
+                            <option value="MTA NYCT_B49">B49 - Manhattan Beach - Bedford-Stuyvesant</option>
+                            <option value="MTA NYCT_B52">B52 - Downtown Brooklyn - Ridgewood</option>
+                            <option value="MTA NYCT_B54">B54 - Downtown Brooklyn - Ridgewood</option>
+                            <option value="MTA NYCT_B57">B57 - Gowanus - Maspeth</option>
+                            <option value="MTA NYCT_B6">B6 - Bath Beach - East New York</option>
+                            <option value="MTA NYCT_B60">B60 - Williamsburg - Canarsie</option>
+                            <option value="MTA NYCT_B61">B61 - Park Slope - Downtown Brooklyn</option>
+                            <option value="MTA NYCT_B62">B62 - Downtown Brooklyn - Long Island City</option>
+                            <option value="MTA NYCT_B63">B63 - Bay Ridge - Cobble Hill</option>
+                            <option value="MTA NYCT_B64">B64 - Bay Ridge - Coney Island</option>
+                            <option value="MTA NYCT_B65">B65 - Downtown Brooklyn - Crown Heights</option>
+                            <option value="MTA NYCT_B67">B67 - Brooklyn Navy Yard - Kensington</option>
+                            <option value="MTA NYCT_B68">B68 - Coney Island - Windsor Terrace</option>
+                            <option value="MTA NYCT_B69">B69 - Downtown Brooklyn - Kensington</option>
+                            <option value="MTA NYCT_B7">B7 - Midwood - Bedford-Stuyvesant</option>
+                            <option value="MTA NYCT_B70">B70 - Dyker Heights - Sunset Park</option>
+                            <option value="MTA NYCT_B74">B74 - Sea Gate - Stillwell Av</option>
+                            <option value="MTA NYCT_B8">B8 - Dyker Heights - East Flatbush</option>
+                            <option value="MTA NYCT_B82">B82 - Coney Island - Spring Creek Towers</option>
+                            <option value="MTA NYCT_B82+">B82-SBS - Coney Island -spring Creek Towers</option>
+                            <option value="MTA NYCT_B83">B83 - Spring Creek - Broadway Junction</option>
+                            <option value="MTA NYCT_B84">B84 - Spring Creek-New Lots</option>
+                            <option value="MTA NYCT_B9">B9 - Bay Ridge - Kings Plaza</option>
+                            <option value="MTA NYCT_BX1">Bx1 - Riverdale - Mott Haven</option>
+                            <option value="MTA NYCT_BX10">Bx10 - Riverdale - Norwood</option>
+                            <option value="MTA NYCT_BX11">Bx11 - West Farms Rd - Southern Blvd & GW Bridge</option>
+                            <option value="MTA NYCT_BX12">Bx12 - Pelham Pkwy - Fordham Rd</option>
+                            <option value="MTA NYCT_BX12+">Bx12-SBS - Pelham Pkwy - Fordham Rd</option>
+                            <option value="MTA NYCT_BX13">Bx13 - George Washington Bridge - Yankee Stadium</option>
+                            <option value="MTA NYCT_BX15">Bx15 - Fordham Plaza - Manhattanville</option>
+                            <option value="MTA NYCT_BX16">Bx16 - Pelham - Norwood</option>
+                            <option value="MTA NYCT_BX17">Bx17 - Fordham Plaza - Port Morris</option>
+                            <option value="MTA NYCT_BX18">Bx18 - Tremont - Morris Heights</option>
+                            <option value="MTA NYCT_BX19">Bx19 - NY Botanical Garden - Riverbank Park</option>
+                            <option value="MTA NYCT_BX2">Bx2 - Kingsbridge Heights - Mott Haven</option>
+                            <option value="MTA NYCT_BX20">Bx20 - Riverdale - Inwood</option>
+                            <option value="MTA NYCT_BX21">Bx21 - Westchester Sq - Mott Haven</option>
+                            <option value="MTA NYCT_BX22">Bx22 - Bedford Park - Castle Hill</option>
+                            <option value="MTA NYCT_BX24">Bx24 - Country Club - Hutchinson Metro Center</option>
+                            <option value="MTA NYCT_BX26">Bx26 - Co-op City Section 5 - Bedford Park</option>
+                            <option value="MTA NYCT_BX27">Bx27 - Clasons Pt - West Farms Rd & Southern Blvd</option>
+                            <option value="MTA NYCT_BX28">Bx28 - Co-op City Section 5 - Fordham Center</option>
+                            <option value="MTA NYCT_BX29">Bx29 - City Island - Co-op City Bay Plaza</option>
+                            <option value="MTA NYCT_BX3">Bx3 - Riverdale - George Washington Bridge</option>
+                            <option value="MTA NYCT_BX30">Bx30 - Co-op City Section 5 - Norwood</option>
+                            <option value="MTA NYCT_BX31">Bx31 - Woodlawn - Westchester Sq</option>
+                            <option value="MTA NYCT_BX32">Bx32 - Kingsbridge VA Hospital - Mott Haven</option>
+                            <option value="MTA NYCT_BX33">Bx33 - Port Morris - Harlem</option>
+                            <option value="MTA NYCT_BX34">Bx34 - Woodlawn - Fordham Center</option>
+                            <option value="MTA NYCT_BX35">Bx35 - West Farms Rd & Southern Blvd - GW Bridge</option>
+                            <option value="MTA NYCT_BX36">Bx36 - Soundview - George Washington Bridge</option>
+                            <option value="MTA NYCT_BX38">Bx38 - Co-op City Bay Plaza - Norwood</option>
+                            <option value="MTA NYCT_BX39">Bx39 - Wakefield - Clasons Pt</option>
+                            <option value="MTA NYCT_BX4">Bx4 - Westchester Sq - The Hub</option>
+                            <option value="MTA NYCT_BX40">Bx40 - Throgs Neck - River Park Towers</option>
+                            <option value="MTA NYCT_BX41">Bx41 - Williamsbridge - The Hub</option>
+                            <option value="MTA NYCT_BX41+">Bx41-SBS - Williamsbridge - The Hub</option>
+                            <option value="MTA NYCT_BX42">Bx42 - Throgs Neck - River Park Towers</option>
+                            <option value="MTA NYCT_BX46">Bx46 - Prospect Av - Westchester Av / Hunts Point Market</option>
+                            <option value="MTA NYCT_BX4A">Bx4A - Westchester Sq - The Hub</option>
+                            <option value="MTA NYCT_BX5">Bx5 - Pelham Bay - West Farms Rd & Southern Blvd</option>
+                            <option value="MTA NYCT_BX6">Bx6 - Hunts Point - Riverside Dr</option>
+                            <option value="MTA NYCT_BX6+">Bx6-SBS - Hunts Point - Riverside Dr</option>
+                            <option value="MTA NYCT_BX7">Bx7 - Riverdale - Washington Heights</option>
+                            <option value="MTA NYCT_BX8">Bx8 - Williamsbridge - Locust Point</option>
+                            <option value="MTA NYCT_BX9">Bx9 - Riverdale - West Farms Sq</option>
+                            <option value="MTA NYCT_JBLAF">JBLAF - J/M Shuttle Bus-Broadway/Lafayette and Hewes St</option>
+                            <option value="MTA NYCT_L0202">MW-ML - L Shuttle Bus-Myrtle-Wyckoff Avenue and Lorimer Street</option>
+                            <option value="MTA NYCT_L0719">BEDLOOP - L Shuttle Bus-Marcy Avenue and Lorimer Street</option>
+                            <option value="MTA NYCT_L1227">BJ-MW - L Shuttle Bus-Broadway Junction and Myrtle-Wyckoff</option>
+                            <option value="MTA NYCT_M1">M1 - Harlem - East Village</option>
+                            <option value="MTA NYCT_M10">M10 - Harlem - Columbus Circle</option>
+                            <option value="MTA NYCT_M100">M100 - Inwood - East Harlem</option>
+                            <option value="MTA NYCT_M101">M101 - East Village - Harlem</option>
+                            <option value="MTA NYCT_M102">M102 - Harlem - East Village</option>
+                            <option value="MTA NYCT_M103">M103 - East Harlem - City Hall</option>
+                            <option value="MTA NYCT_M104">M104 - West Harlem - Times Square</option>
+                            <option value="MTA NYCT_M106">M106 - East Harlem - West Side</option>
+                            <option value="MTA NYCT_M11">M11 - Riverbank Park & Harlem - West Village</option>
+                            <option value="MTA NYCT_M116">M116 - West Side - East Harlem</option>
+                            <option value="MTA NYCT_M12">M12 - Midtown West - West Village</option>
+                            <option value="MTA NYCT_M14A">M14A - Lower East Side - Abingdon Sq</option>
+                            <option value="MTA NYCT_M14D">M14D - Lower East Side - Chelsea Piers</option>
+                            <option value="MTA NYCT_M15">M15 - East Harlem - South Ferry</option>
+                            <option value="MTA NYCT_M15+">M15-SBS - East Harlem - South Ferry</option>
+                            <option value="MTA NYCT_M2">M2 - Washington Heights - East Village</option>
+                            <option value="MTA NYCT_M20">M20 - Lincoln Center - South Ferry</option>
+                            <option value="MTA NYCT_M21">M21 - Lower East Side - West Village LTD</option>
+                            <option value="MTA NYCT_M22">M22 - Lower East Side - Battery Park City</option>
+                            <option value="MTA NYCT_M23+">M23-SBS - Chelsea Piers - East Side</option>
+                            <option value="MTA NYCT_M3">M3 - Fort George - East Village</option>
+                            <option value="MTA NYCT_M31">M31 - Yorkville - Clinton</option>
+                            <option value="MTA NYCT_M34+">M34-SBS - East Side - Javits Center</option>
+                            <option value="MTA NYCT_M34A+">M34A-SBS - Waterside - Port Authority Terminal</option>
+                            <option value="MTA NYCT_M35">M35 - Ward's Island - East Harlem</option>
+                            <option value="MTA NYCT_M4">M4 - The Cloisters - 32 St</option>
+                            <option value="MTA NYCT_M42">M42 - United Nations - W 42 St Pier</option>
+                            <option value="MTA NYCT_M5">M5 - George Washington Bridge - 31 St & 6 Av</option>
+                            <option value="MTA NYCT_M50">M50 - W 42 St Pier - East Side</option>
+                            <option value="MTA NYCT_M55">M55 - W 44 St  - South Ferry</option>
+                            <option value="MTA NYCT_M57">M57 - East Side - West Side</option>
+                            <option value="MTA NYCT_M60+">M60-SBS - LaGuardia Airport - West Side</option>
+                            <option value="MTA NYCT_M66">M66 - East Side - Lincoln Center</option>
+                            <option value="MTA NYCT_M7">M7 - Harlem - 14th Street</option>
+                            <option value="MTA NYCT_M72">M72 - East Side - West Side</option>
+                            <option value="MTA NYCT_M79+">M79-SBS - Yorkville - West Side</option>
+                            <option value="MTA NYCT_M8">M8 - West Village - East Village LTD</option>
+                            <option value="MTA NYCT_M86+">M86-SBS - Yorkville - West Side</option>
+                            <option value="MTA NYCT_M9">M9 - Battery Park City - Kips Bay</option>
+                            <option value="MTA NYCT_M96">M96 - East Side - West Side</option>
+                            <option value="MTA NYCT_M98">M98 - Washington Heights - Upper East Side</option>
+                            <option value="MTA NYCT_Q1">Q1 - Queens Village / Bellerose - Jamaica</option>
+                            <option value="MTA NYCT_Q12">Q12 - Little Neck - Flushing</option>
+                            <option value="MTA NYCT_Q13">Q13 - Fort Totten - Flushing</option>
+                            <option value="MTA NYCT_Q15">Q15 - Flushing - Beechhurst</option>
+                            <option value="MTA NYCT_Q15A">Q15A - Flushing - Beechhurst / Whitestone</option>
+                            <option value="MTA NYCT_Q16">Q16 - Fort Totten - Flushing</option>
+                            <option value="MTA NYCT_Q17">Q17 - Flushing - Jamaica</option>
+                            <option value="MTA NYCT_Q2">Q2 - Queens Village - Jamaica</option>
+                            <option value="MTA NYCT_Q20A">Q20A - College Point - Jamaica</option>
+                            <option value="MTA NYCT_Q20B">Q20B - College Point - Jamaica</option>
+                            <option value="MTA NYCT_Q24">Q24 - Broadway Junction - Jamaica</option>
+                            <option value="MTA NYCT_Q26">Q26 - Fresh Meadows - Flushing (Part-time)</option>
+                            <option value="MTA NYCT_Q27">Q27 - Cambria Heights - Flushing</option>
+                            <option value="MTA NYCT_Q28">Q28 - Bayside - Flushing</option>
+                            <option value="MTA NYCT_Q3">Q3 - Jamaica - JFK Airport</option>
+                            <option value="MTA NYCT_Q30">Q30 - Little Neck or Queensborough Community College - Jamaica</option>
+                            <option value="MTA NYCT_Q31">Q31 - Bayside - Jamaica</option>
+                            <option value="MTA NYCT_Q32">Q32 - Jackson Heights - Penn Station</option>
+                            <option value="MTA NYCT_Q36">Q36 - Floral Park or Little Neck - Jamaica</option>
+                            <option value="MTA NYCT_Q4">Q4 - Cambria Heights - Jamaica</option>
+                            <option value="MTA NYCT_Q42">Q42 - Addeslieigh Park - Jamaica</option>
+                            <option value="MTA NYCT_Q43">Q43 - Floral Park - Jamaica</option>
+                            <option value="MTA NYCT_Q44+">Q44-SBS - Bronx Zoo - Jamaica</option>
+                            <option value="MTA NYCT_Q46">Q46 - Glen Oaks - Kew Gardens</option>
+                            <option value="MTA NYCT_Q48">Q48 - Flushing - LaGuardia Airport</option>
+                            <option value="MTA NYCT_Q5">Q5 - Rosedale - Jamaica</option>
+                            <option value="MTA NYCT_Q54">Q54 - Williamsburg - Jamaica</option>
+                            <option value="MTA NYCT_Q55">Q55 - Ridgewood - Richmond Hill</option>
+                            <option value="MTA NYCT_Q56">Q56 - Broadway Junction - Jamaica</option>
+                            <option value="MTA NYCT_Q58">Q58 - Ridgewood - Flushing</option>
+                            <option value="MTA NYCT_Q59">Q59 - Williamsburg - Rego Park</option>
+                            <option value="MTA NYCT_Q76">Q76 - College Point - Jamaica</option>
+                            <option value="MTA NYCT_Q77">Q77 - Laurelton - Jamaica</option>
+                            <option value="MTA NYCT_Q83">Q83 - Cambria Heights - Jamaica</option>
+                            <option value="MTA NYCT_Q84">Q84 - Laurelton - Jamaica</option>
+                            <option value="MTA NYCT_Q85">Q85 - Rosedale - Jamaica</option>
+                            <option value="MTA NYCT_Q88">Q88 - Elmhurst - Queens Village</option>
+                            <option value="MTA NYCT_S40">S40 - St. George - Goethals Rd North</option>
+                            <option value="MTA NYCT_S42">S42 - St. George - Clyde Place</option>
+                            <option value="MTA NYCT_S44">S44 - St. George - Staten Island Mall</option>
+                            <option value="MTA NYCT_S46">S46 - St. George - West Shore Plaza</option>
+                            <option value="MTA NYCT_S48">S48 - St. George - Mariners Harbor</option>
+                            <option value="MTA NYCT_S51">S51 - St. George - West Shore Plaza</option>
+                            <option value="MTA NYCT_S52">S52 - St. George - Staten Island Univ. Hospital</option>
+                            <option value="MTA NYCT_S53">S53 - Port Richmond - Bay Ridge</option>
+                            <option value="MTA NYCT_S54">S54 - West New Brighton - Eltingville</option>
+                            <option value="MTA NYCT_S55">S55 - Rossville - Staten Island Mall</option>
+                            <option value="MTA NYCT_S56">S56 - Huguenot - Staten Island Mall</option>
+                            <option value="MTA NYCT_S57">S57 - Port Richmond - New Dorp</option>
+                            <option value="MTA NYCT_S59">S59 - Port Richmond - Tottenville</option>
+                            <option value="MTA NYCT_S61">S61 - St. George - Staten Island Mall</option>
+                            <option value="MTA NYCT_S62">S62 - St. George - Travis</option>
+                            <option value="MTA NYCT_S66">S66 - St. George - Port Richmond</option>
+                            <option value="MTA NYCT_S74">S74 - St. George - Bricktown Mall</option>
+                            <option value="MTA NYCT_S76">S76 - St. George - Oakwood</option>
+                            <option value="MTA NYCT_S78">S78 - St. George - Bricktown Mall</option>
+                            <option value="MTA NYCT_S79+">S79-SBS - Staten Island Mall - Bay Ridge</option>
+                            <option value="MTA NYCT_S81">S81 - St. George - Grant City LTD</option>
+                            <option value="MTA NYCT_S84">S84 - St. George - Bricktown Mall LTD</option>
+                            <option value="MTA NYCT_S86">S86 - St. George - Oakwood LTD</option>
+                            <option value="MTA NYCT_S89">S89 - Eltingville - Bayonne LTD</option>
+                            <option value="MTA NYCT_S90">S90 - St. George - Goethals Rd North LTD</option>
+                            <option value="MTA NYCT_S91">S91 - St. George - Staten Island Mall LTD</option>
+                            <option value="MTA NYCT_S92">S92 - St. George - Travis LTD</option>
+                            <option value="MTA NYCT_S93">S93 - College of Staten Island - Bay Ridge LTD</option>
+                            <option value="MTA NYCT_S94">S94 - St. George - Staten Island Mall LTD</option>
+                            <option value="MTA NYCT_S96">S96 - St. George - West Shore Plaza LTD</option>
+                            <option value="MTA NYCT_S98">S98 - St. George - Mariners Harbor LTD</option>
+                            <option value="MTA NYCT_SIM1">SIM1 - Staten Island - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM10">SIM10 - Eltingville - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM11">SIM11 - New Dorp - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM15">SIM15 - Eltingville - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM1C">SIM1C - Staten Island - Manhattan Express</option>
+                            <option value="MTA NYCT_SIM2">SIM2 - Staten Island - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM22">SIM22 - Eltingville - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM25">SIM25 - Tottenville - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM26">SIM26 - Tottenville - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM3">SIM3 - Staten Island - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM30">SIM30 - Sunnyside - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM31">SIM31 - Eltingville - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM32">SIM32 - Travis - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM33">SIM33 - Mariners Harbor - Greenwich Village Express</option>
+                            <option value="MTA NYCT_SIM33C">SIM33C - Mariners Harbor - Greenwich Village Express</option>
+                            <option value="MTA NYCT_SIM34">SIM34 - Mariners Harbor - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM35">SIM35 - Port Richmond - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM3C">SIM3C - Staten Island - Manhattan Express</option>
+                            <option value="MTA NYCT_SIM4">SIM4 - Staten Island - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM4C">SIM4C - Staten Island - Manhattan Express</option>
+                            <option value="MTA NYCT_SIM4X">SIM4X - Staten Island - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM5">SIM5 - Staten Island - Lower Manhattan Express</option>
+                            <option value="MTA NYCT_SIM6">SIM6 - Staten Island - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM7">SIM7 - Staten Island - Greenwich village Express</option>
+                            <option value="MTA NYCT_SIM8">SIM8 - Staten Island - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM8X">SIM8X - Staten Island - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_SIM9">SIM9 - Eltingville - Greenwich Village Express</option>
+                            <option value="MTA NYCT_X27">X27 - Bay Ridge - Manhattan Express</option>
+                            <option value="MTA NYCT_X28">X28 - Sea Gate / Bensonhurst - Manhattan Express</option>
+                            <option value="MTA NYCT_X37">X37 - Bay Ridge - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_X38">X38 - Sea Gate / Bensonhurst - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_X63">X63 - Rosedale - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_X64">X64 - Cambria Heights - Midtown Manhattan Express</option>
+                            <option value="MTA NYCT_X68">X68 - Floral Park - Midtown Manhattan Express</option>
+                        </select>
+                    </div>
+                </td>
+					<td><div class="wait"><img id="routeWait" class="hidden wait" src="img/circle.gif" alt="Please wait"/></div></td>
+				</tr>
+				<tr>
+					<td colspan="2">Direction:</td>
+				</tr>	
+                <tr>
+                    	<td><select id="MainMobileContent_directionList" class="dropList" style="width:90vw;" onchange="getStops();">
+                            </select>
+                        </td>
+					<td><div class="wait"><img id="directionWait" class="hidden wait" src="img/circle.gif" alt="Please wait"/></div></td>
+				</tr>
+
+				<tr>
+					<td colspan="2">Stop:</td>
+				</tr>
+                <tr>
+                    <td><select id="MainMobileContent_stopList" class="dropList" style="width:90vw;" onchange="getArrivalTimes();">
+                        </select>
+                    </td>
+					<td><div class="wait"><img id="stopWait" class="hidden wait" src="img/circle.gif" alt="Please wait"/></div></td>
+				</tr>
+			</table>
+                <h2 style="text-align:center;">
+                    <button onclick="saveFavorites();" id="btnSave" style="border:none; background-color: lightgreen; color:black;visibility: hidden;">&#x2764; Add to favorites</button>
+                </h2>
+                <label id="message" style="font-size: large;"></label> 
+                <div class="js-next-bus-results" style="display:none; text-align: center;">
+                </div>
+		</div>
+<div id="footer">
+  <div class="col-xs-12 navbar-inverse navbar-fixed-bottom">
+  <div class="row" id="bottomNav">
+    <div class="col-xs-6 text-center"><a href="index.html"><i class="glyphicon glyphicon-time"></i><br>Arrivals</a></div>
+    <div class="col-xs-6 text-center"><a href="javascript:loadFaves();"><i class="glyphicon glyphicon glyphicon-star-empty"></i><br>Favorites</a></div>
+  </div>
+  </div>
+</div>
+
+        <script type='text/javascript' src="js/bootstrap.min.js"></script>
+
+</div>
+    	
+</body>
+</html>
