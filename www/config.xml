@@ -8,13 +8,15 @@ xmlns:gap="http://phonegap.com/ns/1.0"
 >
     <name>MTA Bus Time</name>
     <description>
-        Bus App.
+        App.
     </description>
     <author email="support@phonegap.com" href="http://phonegap.com">
         PhoneGap Team
     </author>
     <content src="index.html" />
     <preference name="android-build-tool" value="gradle" /> 
+    <preference name="phonegap-version" value="cli-8.0.0" />
+    <gap:plugin name="cordova-plugin-admobpro" source="npm" />
     <preference name="permissions" value="none" />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
@@ -27,20 +29,20 @@ xmlns:gap="http://phonegap.com/ns/1.0"
     <preference name="exit-on-suspend" value="false" />
     <preference name="SplashScreenDelay" value="0"/>
     <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="DisallowOverscroll" value ="true" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-minSdkVersion" value="16" />
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="android-installLocation" value="auto" />
     <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="DisallowOverscroll" value ="true" />
-    <gap:plugin name="cordova-plugin-admobpro" source="npm" spec="2.31.6"/>
     <gap:plugin name="cordova-plugin-statusbar" source="npm"/>
     <gap:plugin name="cordova-plugin-device" source="npm" />
+    <gap:plugin name="cordova-plugin-device-motion" source="npm"/>
+    <gap:plugin name="cordova-plugin-geolocation" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
     <gap:plugin name="cordova-plugin-dialogs" source="npm"/>
     <gap:plugin name="cordova-plugin-apprate" source="npm"/>
-    <gap:plugin name="cordova-plugin-google-analytics" source="npm" spec="1.8.4"/>
-    <gap:plugin name="cordova-play-services-version-adapter" source="npm"/>
+    <gap:plugin name="cordova-plugin-google-analytics" source="npm" spec="1.8.3"/>
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
