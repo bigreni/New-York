@@ -40,7 +40,9 @@
         document.addEventListener('onAdFailLoad', function (data) {
             document.getElementById('screen').style.display = 'none';     
         });
-        document.addEventListener('onAdLoaded', function (data) { });
+        document.addEventListener('onAdLoaded', function (data) {
+               AdMob.showInterstitial();
+        });
         document.addEventListener('onAdPresent', function (data) { });
         document.addEventListener('onAdLeaveApp', function (data) { });
         document.addEventListener('onAdDismiss', function (data) { 
@@ -54,10 +56,11 @@
 
     function loadInterstitial() {
         if ((/(android|windows phone)/i.test(navigator.userAgent))) {
-            AdMob.prepareInterstitial({ adId: admobid.interstitial, isTesting: false, autoShow: true });
-        } else if ((/(ipad|iphone|ipod)/i.test(navigator.userAgent))) {
-            //AdMob.prepareInterstitial({ adId: admobid.interstitial, isTesting: false, autoShow: true });
             document.getElementById("screen").style.display = 'none';     
+            //AdMob.prepareInterstitial({ adId: admobid.interstitial, isTesting: false, autoShow: false });
+        } else if ((/(ipad|iphone|ipod)/i.test(navigator.userAgent))) {
+            AdMob.prepareInterstitial({ adId: admobid.interstitial, isTesting: false, autoShow: true });
+            //document.getElementById("screen").style.display = 'none';     
         } else
         {
             document.getElementById("screen").style.display = 'none';     
@@ -67,12 +70,12 @@
    function checkFirstUse()
     {
         $(".dropList").select2();
-        window.ga.startTrackerWithId('UA-88579601-20', 1, function(msg) {
-            window.ga.trackView('NYC Home');
-        });  
+        //window.ga.startTrackerWithId('UA-88579601-20', 1, function(msg) {
+        //    window.ga.trackView('NYC Home');
+        //});  
         initApp();
         askRating();
-        document.getElementById("screen").style.display = 'none';     
+        //document.getElementById("screen").style.display = 'none';     
     }
 
    function notFirstUse()
@@ -100,7 +103,7 @@ AppRate.promptForRating(false);
 
 function getDirections() {
     reset();  
-    var url = encodeURI("http://bustime.mta.info/api/where/stops-for-route/" + $("#MainMobileContent_routeList").val() + ".json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&includePolylines=false&version=2");
+    var url = encodeURI("https://bustime.mta.info/api/where/stops-for-route/" + $("#MainMobileContent_routeList").val() + ".json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&includePolylines=false&version=2");
 	$.get(url, function(data) {processDirections(data); });    $("span").remove();
     $(".dropList").select2();
 }
@@ -124,7 +127,7 @@ function processDirections(output)
 function getStops()
 {
     reset(); 
-    var url = encodeURI("http://bustime.mta.info/api/where/stops-for-route/" + $("#MainMobileContent_routeList").val() + ".json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&includePolylines=false&version=2");
+    var url = encodeURI("https://bustime.mta.info/api/where/stops-for-route/" + $("#MainMobileContent_routeList").val() + ".json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&includePolylines=false&version=2");
 	$.get(url, function(data) {  processStops(data); });
     $("span").remove();
     $(".dropList").select2();
@@ -158,7 +161,7 @@ function processStops(output)
 
 function getArrivalTimes() {
     reset();
-    var url = encodeURI("http://bustime.mta.info/api/siri/stop-monitoring.json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&OperatorRef=MTA&MonitoringRef=" + $("#MainMobileContent_stopList").val() + "&LineRef=" + $("#MainMobileContent_routeList").val());
+    var url = encodeURI("https://bustime.mta.info/api/siri/stop-monitoring.json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&OperatorRef=MTA&MonitoringRef=" + $("#MainMobileContent_stopList").val() + "&LineRef=" + $("#MainMobileContent_routeList").val());
 	$.get(url, function(data) {  processPredictions(data); });       
     $("span").remove();
     $(".dropList").select2();

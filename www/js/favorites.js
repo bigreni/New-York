@@ -34,7 +34,7 @@ function removeFavorite(index)
 }
 
 function loadArrivals(route, stop, text) {
-    var url = encodeURI("http://bustime.mta.info/api/siri/stop-monitoring.json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&OperatorRef=MTA&MonitoringRef=" + stop + "&LineRef=" + route);
+    var url = encodeURI("https://bustime.mta.info/api/siri/stop-monitoring.json?key=2831577d-91f0-41b5-a3e3-a562be3e8967&OperatorRef=MTA&MonitoringRef=" + stop + "&LineRef=" + route);
 	$.get(url, function(data) {  processPredictions(data, text); });    
 }
 
